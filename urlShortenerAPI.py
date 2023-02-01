@@ -70,19 +70,28 @@ def all_urls():
     elif 5 < len(keys):
         return jsonify(response={"error": "Only 5 API_KEY's at request allowed."}), 413
     else:
-        json_all = {}
-        all_created = Urls.query.all()
-        if len(all_created) == 0:
+        all_random_created = {}
+        all_custom_created = {}
+        all_random = Urls.query.all()
+        all_custom = Custom.query.all()
+        if len(all_random) and len(all_custom) == 0:
             return jsonify(response={"succes": "no records done yet"}), 200
         else:
-            for _ in all_created:
-                json_all[f'{_.id}'] = {
+            for _ in all_random:
+                all_random_created[f'{_.id}'] = {
                     "id": _.id,
                     "original_url": _.long_url,
                     "shortened_url": _.short_url,
                     "creation_time": _.time,
                 }
-            return jsonify(json_all), 200
+            for _ in all_custom:
+                all_custom_created[f'{_.id}'] = {
+                    "id": _.id,
+                    "original_url": _.long_url,
+                    "custom_url": _.custom_url,
+                    "creation_time": _.time,
+                }
+            return jsonify(custom_created=all_custom_created, random_created=all_random_created), 200
 
 
 @shorty.route("/add", methods=['GET'])
@@ -97,14 +106,15 @@ def add_url():
                 pass
             else:
                 try:
-                    con = session.head(_, timeout=5)
+                    con = session.head(_, timeout=6)
                     if con.status_code >= 400:
                         not_responding.append(_)
-                except requests.exceptions.ConnectionError:
+                except requests.RequestException:
                     not_responding.append(_)
         session.close()
         urls = [url for url in urls if url not in not_responding]
-        used = Urls.query.with_entities(Urls.short_url).all()
+        used = [short_url for short_url in Urls.query.with_entities(Urls.short_url).all()
+                + Custom.query.with_entities(Custom.custom_url).all()]
         if len(urls) == 0:
             return jsonify(
                 response={"There's no URL given or all of them are not responding.": not_responding}
@@ -160,7 +170,7 @@ def add_url():
 def clearing_db():
     try:
         if request.headers["api-key"] == ADMIN:
-            if len(Urls.query.all()) == 0:
+            if len(Urls.query.all()) == 0 and len(Custom.query.all()) == 0:
                 return jsonify(response={"succes": "There's was no records in DB"}), 200
             else:
                 for _ in Urls.query.all():
@@ -203,14 +213,14 @@ def custom_url():
         custom_urls = request.json
         if len(custom_urls) == 0:
             return jsonify(response={"error": "Empty body"}), 400
-        elif 1 < len(custom_urls) <= 10:
+        elif 1 <= len(custom_urls) <= 10:
             session = requests.Session()
             for key in custom_urls:
                 if Custom.query.filter_by(long_url=key).first():
                     pass
                 else:
                     try:
-                        con = session.head(key, timeout=5)
+                        con = session.head(key, timeout=6)
                         if con.status_code >= 400:
                             not_responding.append(key)
                     except requests.RequestException:
@@ -224,8 +234,21 @@ def custom_url():
                     added[f"long - {Urls.query.filter_by(short_url=request.url_root + custom_urls[key]).first().long_url}"] = \
                           f"already used - {request.url_root + custom_urls[key]}"
                 elif Custom.query.filter_by(custom_url=request.url_root + custom_urls[key]).first():
-                    added[f"long - {Custom.query.filter_by(custom_url=request.url_root +custom_urls[key]).first().long_url}"] = \
-                          f"already used - {request.url_root + custom_urls[key]}"
+                    all_entries = Custom.query.filter_by(custom_url=request.url_root + custom_urls[key]).all()
+                    all_api_keys = [str(entry.api_key) for entry in all_entries]
+                    if api_key in all_api_keys:
+                        added[f"long - {Custom.query.filter_by(custom_url=request.url_root + custom_urls[key]).first().long_url}"] = \
+                              f"custom - {request.url_root + custom_urls[key]}"
+                    else:
+                        added[f"long - {Custom.query.filter_by(custom_url=request.url_root + custom_urls[key]).first().long_url}"] = \
+                              f"custom - {request.url_root + custom_urls[key]}"
+                        duplicate_data = Custom(
+                            api_key=api_key,
+                            long_url=key,
+                            custom_url=request.url_root + custom_urls[key],
+                            time=creation_time,
+                        )
+                        db.session.add(duplicate_data)
                 else:
                     added[f"long - {key}"] = f"custom - {request.url_root + custom_urls[key]}"
                     custom_data = Custom(
