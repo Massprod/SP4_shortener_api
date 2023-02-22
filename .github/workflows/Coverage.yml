@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ master ]
 env:
-  ADMIN_KEY: 243436
+  ADMIN_KEY: ${{ vars.ENV_CONTEXT_VAR }}
 
 jobs:
   build:
