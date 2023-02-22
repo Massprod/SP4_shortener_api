@@ -25,4 +25,4 @@ jobs:
       - name: Creating Badge
         run: |
           python -m pip install coverage-badge
-          python -m coverage-badge
+          python -m coverage-badge .coverage.xml
