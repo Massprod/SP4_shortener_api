@@ -1,0 +1,27 @@
+name: Badge commit
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Commit badge
+        run: |
+          pwd
+          ls
+          git config --local user.email "action@github.com"
+          git config --local user.name "Github Action"
+          git add ./home/runner/work/SP4_shortener_api/SP4_shortener_api/coverage.svg
+          git commit -m "Add/Update badge"
+      - name: Push badge
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.extract_branch.outputs.branch }}
