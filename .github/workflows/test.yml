@@ -34,8 +34,8 @@ jobs:
           path: /home/runner/work/SP4_shortener_api/SP4_shortener_api/coverage.svg
       - name: Commit badge
         run: |
-          echo "%{{cwd}}"
-          echo "%{{ls}}"
+          pwd
+          ls
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add ./home/runner/work/SP4_shortener_api/SP4_shortener_api/coverage.svg
