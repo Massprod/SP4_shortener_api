@@ -32,16 +32,21 @@ jobs:
           echo ${{ vars.ENV_CONTEXT_VAR }}
           python -m pip install coverage-badge
           coverage-badge -o coverage.svg -f
-      - name: Upload artifact
+      - name: Upload badge
         uses: actions/upload-artifact@v3
         with:
           path: /home/runner/work/SP4_shortener_api/SP4_shortener_api/coverage.svg
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          path: /home/runner/work/SP4_shortener_api/SP4_shortener_api/.coverage
       - name: Commit badge
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
-          git add coverage.svg
-          git commit -m "Add/Update badge"
+          git add .github/coverage/coverage.svg
+          git add .github/coverage/.coverage
+          git commit -m "Add/Update coverage"
       - name: Push badge commit
         uses: ad-m/github-push-action@master
         with:
