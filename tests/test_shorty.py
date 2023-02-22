@@ -310,42 +310,42 @@ def test_redirect_route_with_random_url(client):
         request_redirect.close()
 
 
-# def test_redirect_route_with_custom_url(client):
-#     for name in test_random_names:
-#         request_redirect_custom = client.get(f"/{name}")
-#         root = request_redirect_custom.request.url_root
-#         assert request_redirect_custom.status_code == 302
-#         assert request_redirect_custom.location == Custom.query.filter_by(custom_url=root + name).first().long_url
-#         request_redirect_custom.close()
-#
-#
-# def test_redirect_route_with_wrong_url(client):
-#     wrong_customs = [f"test{_}" for _ in range(30, 40)]
-#     for name in wrong_customs:
-#         request_redirect_wrong = client.get(f"/{name}")
-#         assert request_redirect_wrong.status_code == 404
-#         assert request_redirect_wrong.json["response"]
-#         request_redirect_wrong.close()
-#
-#
-# def test_clear_route_with_api_key(client):
-#     for key in test_api_keys[-4:]:
-#         request_clear_with_key = client.post("/clear", headers={"api-key": key})
-#         assert request_clear_with_key.status_code == 200
-#         assert request_clear_with_key.json["response"]
-#         assert Custom.query.filter_by(api_key=key).first() is None
-#
-#
-# def test_clear_route_with_wrong_key(client):
-#     for key in test_api_keys[-4:]:
-#         request_clear_with_wrong = client.post("/clear", headers={"api-key": key})
-#         assert request_clear_with_wrong.status_code == 200
-#         assert request_clear_with_wrong.json["response"]
-#         assert Custom.query.filter_by(api_key=key).first() is None
-#
-#
-# def test_clear_route_with_admin_key(client):
-#     request_admin = client.post("/clear", headers={"api-key": ADMIN})
-#     assert request_admin.status_code == 200
-#     assert request_admin.json["response"]
-#     assert len(Urls.query.all()) + len(Custom.query.all()) == 0
+def test_redirect_route_with_custom_url(client):
+    for name in test_random_names:
+        request_redirect_custom = client.get(f"/{name}")
+        root = request_redirect_custom.request.url_root
+        assert request_redirect_custom.status_code == 302
+        assert request_redirect_custom.location == Custom.query.filter_by(custom_url=root + name).first().long_url
+        request_redirect_custom.close()
+
+
+def test_redirect_route_with_wrong_url(client):
+    wrong_customs = [f"test{_}" for _ in range(30, 40)]
+    for name in wrong_customs:
+        request_redirect_wrong = client.get(f"/{name}")
+        assert request_redirect_wrong.status_code == 404
+        assert request_redirect_wrong.json["response"]
+        request_redirect_wrong.close()
+
+
+def test_clear_route_with_api_key(client):
+    for key in test_api_keys[-4:]:
+        request_clear_with_key = client.post("/clear", headers={"api-key": key})
+        assert request_clear_with_key.status_code == 200
+        assert request_clear_with_key.json["response"]
+        assert Custom.query.filter_by(api_key=key).first() is None
+
+
+def test_clear_route_with_wrong_key(client):
+    for key in test_api_keys[-4:]:
+        request_clear_with_wrong = client.post("/clear", headers={"api-key": key})
+        assert request_clear_with_wrong.status_code == 200
+        assert request_clear_with_wrong.json["response"]
+        assert Custom.query.filter_by(api_key=key).first() is None
+
+
+def test_clear_route_with_admin_key(client):
+    request_admin = client.post("/clear", headers={"api-key": ADMIN})
+    assert request_admin.status_code == 200
+    assert request_admin.json["response"]
+    assert len(Urls.query.all()) + len(Custom.query.all()) == 0
