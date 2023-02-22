@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - run: echo "Automate Job for PyTest on push/pull"
       - uses: actions/checkout@v3
@@ -25,8 +27,14 @@ jobs:
       - name: Creating Badge
         run: |
           python -m pip install coverage-badge
-          coverage-badge -o coverage.svg
+          coverage-badge -o coverage.svg -f
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           path: /home/runner/work/SP4_shortener_api/SP4_shortener_api/coverage.svg
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage.svg
+          path: /test/arti
+          run: ls -R
