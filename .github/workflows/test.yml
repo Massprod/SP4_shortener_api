@@ -32,9 +32,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: /home/runner/work/SP4_shortener_api/SP4_shortener_api/coverage.svg
-      - name: Download artifact
-        uses: actions/download-artifact@v2
+      - name: Push badge commit
+        uses: ad-m/github-push-action@master
         with:
-          name: coverage.svg
-          path: /home/runner/work/SP4_shortener_api/SP4_shortener_api/coverage.svg
-          run: ls -R
+          github_toke: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.extract_branch.outputs.branch }}
