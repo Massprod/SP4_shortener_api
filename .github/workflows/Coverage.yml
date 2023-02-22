@@ -38,8 +38,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
-          git rm .github/coverage/coverage.svg
-          git add .github/coverage/coverage.svg coverage.svg 
+          git add coverage.svg 
           git commit -m "Add/Update coverage"
       - name: Push badge commit
         uses: ad-m/github-push-action@master
