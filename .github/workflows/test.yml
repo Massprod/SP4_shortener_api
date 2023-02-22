@@ -38,7 +38,7 @@ jobs:
           ls
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
-          git add ./home/runner/work/SP4_shortener_api/SP4_shortener_api/coverage.svg
+          git add coverage.svg
           git commit -m "Add/Update badge"
       - name: Push badge commit
         uses: ad-m/github-push-action@master
