@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ master ]
 env:
-  env_var: ${{ vars.ENV_CONTEXT_VAR }}
+  ADMIN_KEY: 243436
 
 jobs:
   build:
@@ -28,7 +28,8 @@ jobs:
         run: python -m pytest --cov .
       - name: Creating Badge
         run: |
-          echo "{ADMIN_KEY}={243436}" >> $GITHUB_ENV
+          echo ADMIN_KEY
+          echo ${{ vars.ENV_CONTEXT_VAR }}
           python -m pip install coverage-badge
           coverage-badge -o coverage.svg -f
       - name: Upload artifact
