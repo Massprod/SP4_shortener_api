@@ -24,7 +24,7 @@ jobs:
           python -m pip install -r requirements.txt
       - name: run PyTest
         run: |
-          echo $GITHUB_ENV
+          echo $ADMIN_KEY
           python -m pytest --cov .
       - name: Creating Badge
         run: |
