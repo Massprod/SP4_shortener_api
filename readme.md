@@ -1,4 +1,4 @@
-# Shorty - simple Flask UrlShortener API [![Test](https://github.com/Massprod/SP4_shortener_api/blob/master/coverage.svg)](https://github.com/Massprod/SP4_shortener_api/actions/workflows/Coverage.yml)
+# Shorty - simple Flask UrlShortener API [![Test](coverage.svg)](https://github.com/Massprod/SP4_shortener_api/actions/workflows/Coverage.yml)
 
 # Routes
 - **/all** - return all Urls in DB, or for particular api-key if provided
