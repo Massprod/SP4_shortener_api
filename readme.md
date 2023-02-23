@@ -18,3 +18,6 @@
   - use {api-key} as header and Json body: {*URL*: *custom_name*}
 - **/clear** - deletes all records for given api-key
   - use {api-key} as header
+
+# TestHost
+Temporally hosted on [:blue_book:](http://massprod.pythonanywhere.com/all). But **allows** only whitelisted domains from [:book:](https://www.pythonanywhere.com/whitelist/), due of provider rules.
