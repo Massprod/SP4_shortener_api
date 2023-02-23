@@ -20,4 +20,4 @@
   - use {api-key} as header
 
 # TestHost
-Temporally hosted on [:blue_book:](http://massprod.pythonanywhere.com/all). But **allows** only whitelisted domains from [:book:](https://www.pythonanywhere.com/whitelist/), due of provider rules.
+Temporally hosted on [:blue_book:](http://massprod.pythonanywhere.com/all). But **allows** only whitelisted domains from [:book:](https://www.pythonanywhere.com/whitelist/), due to provider rules.
